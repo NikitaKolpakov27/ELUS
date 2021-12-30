@@ -3,9 +3,9 @@ package com.company.model;
 import com.company.enums.*;
 
 public class Figure {
-    Color color;
-    Size size;
-    Type type;
+    private final Color color;
+    private final Size size;
+    private final Type type;
 
     public Color getColor() {
         return color;

@@ -6,7 +6,6 @@ import com.company.enums.Type;
 import com.company.model.Figure;
 
 import java.util.*;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -79,98 +78,92 @@ public class Game {
     private void gameByColor(Color currColor) {
         Random rand = new Random();
 
-        //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
-        Stream<Figure> currColorAnswers = figures.stream().filter(figure -> figure.getColor() == currColor);
-        Stream<Figure> wrongColorAnswers = figures.stream().filter(figure -> figure.getColor() != currColor);
+        //Создание "булевой" переменной для понятия, в какой режим играть (идентичный цвет\размер\тип или иной)
+        int bool = rand.nextInt(2);
+
+
+        Stream<Figure> currColorAnswers;
+        Stream<Figure> wrongColorAnswers;
+        if (bool == 0) {
+            //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
+            currColorAnswers = figures.stream().filter(figure -> figure.getColor() == currColor);
+            wrongColorAnswers = figures.stream().filter(figure -> figure.getColor() != currColor);
+        } else {
+            currColorAnswers = figures.stream().filter(figure -> figure.getColor() != currColor);
+            wrongColorAnswers = figures.stream().filter(figure -> figure.getColor() == currColor);
+        }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currColorAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongColorAnswers.collect(Collectors.toList());
 
-//        System.out.println("Right answers: " + rightAnswers);
-//        int rand_first = rand.nextInt(rightAnswers.size());
-//        int rand_sec = rand.nextInt(rightAnswers.size());
-//        int rand_third = rand.nextInt(rightAnswers.size());
-//        List<Figure> threes = new ArrayList<>(List.of(rightAnswers.get(rand_first), rightAnswers.get(rand_sec),
-//                rightAnswers.get(rand_third)));
-
-//        List<Figure> threes = exceptRepeatInList(rightAnswers);
-
         //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
         List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
         //Лист из начальных 3-х элементов (правильных)
         List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
 
-        System.out.println();
-        System.out.println("Right answers: " + rightAnswers);
-        System.out.println("Wrong answers: " + wrongAnswers);
-
         //Пока есть попытки, можно играть
-        firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes);
+        firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes, bool);
     }
 
     private void gameBySize(Size currSize) {
         Random rand = new Random();
 
-        //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
-        Stream<Figure> currSizeAnswers = figures.stream().filter(figure -> figure.getSize() == currSize);
-        Stream<Figure> wrongSizeAnswers = figures.stream().filter(figure -> figure.getSize() != currSize);
+        int bool = rand.nextInt(2);
+
+
+        Stream<Figure> currSizeAnswers;
+        Stream<Figure> wrongSizeAnswers;
+        if (bool == 0) {
+            //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
+            currSizeAnswers = figures.stream().filter(figure -> figure.getSize() == currSize);
+            wrongSizeAnswers = figures.stream().filter(figure -> figure.getSize() != currSize);
+        } else {
+            currSizeAnswers = figures.stream().filter(figure -> figure.getSize() != currSize);
+            wrongSizeAnswers = figures.stream().filter(figure -> figure.getSize() == currSize);
+        }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currSizeAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongSizeAnswers.collect(Collectors.toList());
 
-//        System.out.println("Right answers: " + rightAnswers);
-//        int rand_first = rand.nextInt(rightAnswers.size());
-//        int rand_sec = rand.nextInt(rightAnswers.size());
-//        int rand_third = rand.nextInt(rightAnswers.size());
-//        List<Figure> threes = new ArrayList<>(List.of(rightAnswers.get(rand_first), rightAnswers.get(rand_sec),
-//                rightAnswers.get(rand_third)));
-//        List<Figure> threes = exceptRepeatInList(rightAnswers);
-
         //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
         List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
         //Лист из начальных 3-х элементов (правильных)
         List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
 
-        System.out.println();
-        System.out.println("Right answers: " + rightAnswers);
-        System.out.println("Wrong answers: " + wrongAnswers);
-
         //Пока есть попытки, можно играть
-        firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes);
+        firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes, bool);
     }
 
     private void gameByType(Type currType) {
         Random rand = new Random();
 
-        //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
-        Stream<Figure> currTypeAnswers = figures.stream().filter(figure -> figure.getType() == currType);
-        Stream<Figure> wrongTypeAnswers = figures.stream().filter(figure -> figure.getType() != currType);
+        int bool = rand.nextInt(2);
+
+
+        Stream<Figure> currTypeAnswers;
+        Stream<Figure> wrongTypeAnswers;
+        if (bool == 0) {
+            //Создание массивов нужного цвета ("правильных") и неправильного ("неверных")
+            currTypeAnswers = figures.stream().filter(figure -> figure.getType() == currType);
+            wrongTypeAnswers = figures.stream().filter(figure -> figure.getType() != currType);
+        } else {
+            currTypeAnswers = figures.stream().filter(figure -> figure.getType() != currType);
+            wrongTypeAnswers = figures.stream().filter(figure -> figure.getType() == currType);
+        }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currTypeAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongTypeAnswers.collect(Collectors.toList());
-
-//        System.out.println("Right answers: " + rightAnswers);
-//        int rand_first = rand.nextInt(rightAnswers.size());
-//        int rand_sec = rand.nextInt(rightAnswers.size());
-//        int rand_third = rand.nextInt(rightAnswers.size());
-//        List<Figure> threes = new ArrayList<>(List.of(rightAnswers.get(rand_first), rightAnswers.get(rand_sec),
-//                rightAnswers.get(rand_third)));
-
 
         //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
         List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
         //Лист из начальных 3-х элементов (правильных)
         List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
 
-        System.out.println();
-        System.out.println("Right answers: " + rightAnswers);
-        System.out.println("Wrong answers: " + wrongAnswers);
-
         //Пока есть попытки, можно играть
-        firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes);
+        firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes, bool);
     }
 
 
@@ -190,7 +183,7 @@ public class Game {
 
     //Игровой процесс. Вынесен в отдельный метод для оптимизации
     private void firstRoundGameProcess(Object currObj, List<Figure> rightAnswers,
-                                       List<Figure> wrongAnswers, List<Figure> threes) {
+                                   List<Figure> wrongAnswers, List<Figure> threes, int bool) {
         Random rand = new Random();
 
         //Пока есть попытки, можно играть
@@ -221,15 +214,31 @@ public class Game {
             //Процесс выбора
             //В зависимости от переданного объекта, выбирается, какой метод будет вызываться
             Object condidiion = null;
-            String name_of_game = "Пойти фигурой того же цвета.";
-            if (currObj instanceof Color) {
+            String name_of_game = "";
+
+            if (currObj instanceof Color && bool == 0) {
                 condidiion = choices.get(ans - 1).getColor();
-            } else if (currObj instanceof Size) {
+                name_of_game = "Пойти фигурой того же цвета.";
+
+            } else if (currObj instanceof Color && bool == 1) {
+                condidiion = choices.get(ans - 1).getColor();
+                name_of_game = "Пойти фигурой иного цвета.";
+            }
+
+            if (currObj instanceof Size && bool == 0) {
                 condidiion = choices.get(ans - 1).getSize();
                 name_of_game = "Пойти фигурой того же размера.";
-            } else {
+            } else if (currObj instanceof Size && bool == 1) {
+                condidiion = choices.get(ans - 1).getSize();
+                name_of_game = "Пойти фигурой иного размера.";
+            }
+
+            if (currObj instanceof Type && bool == 0) {
                 condidiion = choices.get(ans - 1).getType();
                 name_of_game = "Пойти фигурой того же типа.";
+            } else if (currObj instanceof Type && bool == 1) {
+                condidiion = choices.get(ans - 1).getType();
+                name_of_game = "Пойти фигурой иного типа.";
             }
 
             if (condidiion == currObj) {
@@ -260,8 +269,6 @@ public class Game {
         Random rand = new Random();
         List<Figure> copy_list = list;
         List<Figure> newList = new ArrayList<>();
-
-        System.out.println("Copy_list = " + copy_list);
 
         int numberOfElements = 3;
 
