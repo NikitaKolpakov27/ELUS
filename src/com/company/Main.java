@@ -3,6 +3,7 @@ package com.company;
 import com.company.enums.*;
 import com.company.model.Figure;
 import com.company.service.Game;
+import com.company.service.Tools;
 
 import java.util.*;
 
@@ -10,12 +11,28 @@ public class Main {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.firstRound();
+//        game.firstRound();
+
+        List<Figure> baseList = List.of(
+                new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
+                new Figure(Color.BLUE, Size.SMALL, Type.CIRCLE), new Figure(Color.BLUE, Size.SMALL, Type.SQUARE),
+                new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
+                new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE)
+        );
+
+        List<Figure> newList = Tools.filterDifferentParamsList(baseList, Size.BIG, 8);
+//        List<Figure> threes = Tools.filterDifferentParamsList(baseList, Color.BLUE, 3);
+
+        System.out.println("New List: ");
+
+        for (Figure figure: newList) {
+            System.out.println(figure.toString());
+        }
 
 
 
-        List<String> strings = givenList_whenNumberElementsChosen_shouldReturnRandomElementsNoRepeat();
-        System.out.println("list: " + strings);
+//        List<String> strings = givenList_whenNumberElementsChosen_shouldReturnRandomElementsNoRepeat();
+//        System.out.println("list: " + strings);
     }
 
     public static List<String> givenList_whenNumberElementsChosen_shouldReturnRandomElementsNoRepeat() {

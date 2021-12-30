@@ -6,15 +6,33 @@ import com.company.enums.Type;
 import com.company.model.Figure;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Game {
-    List<Figure> figures = List.of(
+    private final List<Figure> figures = List.of(
             new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
             new Figure(Color.BLUE, Size.SMALL, Type.CIRCLE), new Figure(Color.BLUE, Size.SMALL, Type.SQUARE),
             new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
             new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
+
+    private final List<Figure> figures_only_big = List.of(
+            new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
+            new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE));
+
+    private final List<Figure> figures_only_small = List.of(
+            new Figure(Color.BLUE, Size.SMALL, Type.CIRCLE), new Figure(Color.BLUE, Size.SMALL, Type.SQUARE),
+            new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
+
+    private final List<Figure> figures_only_blue = List.of(
+            new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
+            new Figure(Color.BLUE, Size.SMALL, Type.CIRCLE), new Figure(Color.BLUE, Size.SMALL, Type.SQUARE));
+
+    private final List<Figure> figures_only_yellow = List.of(
+            new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
+            new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
+
     private int attempts = 3;
     private int points;
 
@@ -89,21 +107,31 @@ public class Game {
             currColorAnswers = figures.stream().filter(figure -> figure.getColor() == currColor);
             wrongColorAnswers = figures.stream().filter(figure -> figure.getColor() != currColor);
         } else {
-            currColorAnswers = figures.stream().filter(figure -> figure.getColor() != currColor);
-            wrongColorAnswers = figures.stream().filter(figure -> figure.getColor() == currColor);
+            currColorAnswers = figures.stream();
+            wrongColorAnswers = figures.stream();
         }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currColorAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongColorAnswers.collect(Collectors.toList());
 
-        //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
-        List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
-        //Лист из начальных 3-х элементов (правильных)
-        List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
+        List<Figure> threes;
 
-        //Пока есть попытки, можно играть
-        firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes, bool);
+        //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
+        // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
+        if (bool == 1) {
+            rightAnswers = Tools.filterDifferentParamsList(figures, currColor, 8);
+
+            threes = Tools.filterDifferentParamsList(figures, currColor, 3);
+
+            firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes, bool);
+        } else {
+            List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
+
+            threes = Tools.exceptRepeatInList(rightAnswers_copy, 3);
+
+            firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes, bool);
+        }
     }
 
     private void gameBySize(Size currSize) {
@@ -119,21 +147,31 @@ public class Game {
             currSizeAnswers = figures.stream().filter(figure -> figure.getSize() == currSize);
             wrongSizeAnswers = figures.stream().filter(figure -> figure.getSize() != currSize);
         } else {
-            currSizeAnswers = figures.stream().filter(figure -> figure.getSize() != currSize);
-            wrongSizeAnswers = figures.stream().filter(figure -> figure.getSize() == currSize);
+            currSizeAnswers = figures.stream();
+            wrongSizeAnswers = figures.stream();
         }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currSizeAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongSizeAnswers.collect(Collectors.toList());
 
-        //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
-        List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
-        //Лист из начальных 3-х элементов (правильных)
-        List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
+        List<Figure> threes;
 
-        //Пока есть попытки, можно играть
-        firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes, bool);
+        //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
+        // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
+        if (bool == 1) {
+            rightAnswers = Tools.filterDifferentParamsList(figures, currSize, 8);
+
+            threes = Tools.filterDifferentParamsList(figures, currSize, 3);
+
+            firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes, bool);
+        } else {
+            List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
+
+            threes = Tools.exceptRepeatInList(rightAnswers_copy, 3);
+
+            firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes, bool);
+        }
     }
 
     private void gameByType(Type currType) {
@@ -149,28 +187,57 @@ public class Game {
             currTypeAnswers = figures.stream().filter(figure -> figure.getType() == currType);
             wrongTypeAnswers = figures.stream().filter(figure -> figure.getType() != currType);
         } else {
-            currTypeAnswers = figures.stream().filter(figure -> figure.getType() != currType);
-            wrongTypeAnswers = figures.stream().filter(figure -> figure.getType() == currType);
+            currTypeAnswers = figures.stream();
+            wrongTypeAnswers = figures.stream();
         }
 
         //Перевод из Стримов в Листы
         List<Figure> rightAnswers = currTypeAnswers.collect(Collectors.toList());
         List<Figure> wrongAnswers = wrongTypeAnswers.collect(Collectors.toList());
 
-        //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
-        List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
         //Лист из начальных 3-х элементов (правильных)
-        List<Figure> threes = exceptRepeatInList(rightAnswers_copy);
+        List<Figure> threes;
 
-        //Пока есть попытки, можно играть
-        firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes, bool);
+        //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
+        // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
+        if (bool == 1) {
+            rightAnswers = Tools.filterDifferentParamsList(figures, currType, 8);
+
+            threes = Tools.filterDifferentParamsList(figures, currType, 3);
+
+            System.out.println("Size right: " + rightAnswers.size());
+            System.out.println("Size wrong: " + wrongAnswers.size());
+
+            firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes, bool);
+        } else {
+            //Копирование листа правильных ответов (а то почему-то удаляются элементы после вызова exceptRepeatInList)
+            List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
+
+            //Лист из начальных 3-х элементов (правильных)
+            threes = Tools.exceptRepeatInList(rightAnswers_copy, 3);
+
+            firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes, bool);
+        }
     }
 
 
 
     //Метод для выбора правильного и неправильных ответов
-    private List<Figure> getChoices(List<Figure> rightAnswers, List<Figure> wrongAnswers) {
+    private List<Figure> getChoices(List<Figure> rightAnswers, List<Figure> wrongAnswers,
+                                    List<Figure> threes, int bool, Object currObj) {
         Random rand = new Random();
+
+        if (bool == 1) {
+            if (currObj instanceof Color) {
+                if (threes.get(threes.size() - 1).getColor() == currObj) {
+                    Stream<Figure> wrongAnswers_stream = figures.stream().filter(figure -> figure.getColor() == currObj);
+                    Stream<Figure> rightAnswers_stream = figures.stream().filter(figure -> figure.getColor() != currObj);
+
+                    rightAnswers = rightAnswers_stream.collect(Collectors.toList());
+                    wrongAnswers = wrongAnswers_stream.collect(Collectors.toList());
+                }
+            }
+        }
 
         int ran = rand.nextInt(rightAnswers.size()); //Рандомный индекс по "правильному" листу
 
@@ -179,6 +246,8 @@ public class Game {
 
         //Создание выбора (состоит из 1 правильного и 2-х неправильных вариантов)
         return List.of(rightAnswers.get(ran), wrongAnswers.get(ran_wr_1), wrongAnswers.get(ran_wr_2));
+
+
     }
 
     //Игровой процесс. Вынесен в отдельный метод для оптимизации
@@ -191,7 +260,7 @@ public class Game {
             System.out.println("Текущая последовательность: " + threes);
             System.out.println("\n");
 
-            List<Figure> choices = getChoices(rightAnswers, wrongAnswers);
+            List<Figure> choices = getChoices(rightAnswers, wrongAnswers, threes, bool, currObj);
             List<Figure> choices_copy = new ArrayList<>(choices.subList(0, choices.size()));
             List<Figure> tempList = new ArrayList<>();
 
@@ -258,27 +327,11 @@ public class Game {
                 points -= 1;
                 if (attempts == 0) {
                     System.out.println("Игра окончена. Вы дисквалифицированы.");
+                    System.out.println("Условием было:" + name_of_game);
                     System.out.println("Набрано очков: " + points);
                     break;
                 }
             }
         }
-    }
-
-    private List<Figure> exceptRepeatInList(List<Figure> list) {
-        Random rand = new Random();
-        List<Figure> copy_list = list;
-        List<Figure> newList = new ArrayList<>();
-
-        int numberOfElements = 3;
-
-        for (int i = 0; i < numberOfElements; i++) {
-            int randomIndex = rand.nextInt(copy_list.size());
-            Figure randomElement = copy_list.get(randomIndex);
-            newList.add(randomElement);
-            System.out.println(randomElement);
-            copy_list.remove(randomIndex);
-        }
-        return newList;
     }
 }
