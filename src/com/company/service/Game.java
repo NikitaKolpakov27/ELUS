@@ -6,7 +6,6 @@ import com.company.enums.Type;
 import com.company.model.Figure;
 
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +36,7 @@ public class Game {
     private int points;
 
 
-    public void firstRound() {
+    public void firstTour() {
 
         //Рандомно получаем, как будем играть (по цвету, размеру или типу)
         Object obj = null;
@@ -120,9 +119,11 @@ public class Game {
         //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
         // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
         if (bool == 1) {
-            rightAnswers = Tools.filterDifferentParamsList(figures, currColor, 8);
+            //rightAnswers = Tools.filterDifferentParamsList(figures, currColor, 8);
 
             threes = Tools.filterDifferentParamsList(figures, currColor, 3);
+
+            System.out.println("Diff color");
 
             firstRoundGameProcess(currColor, rightAnswers, wrongAnswers, threes, bool);
         } else {
@@ -160,9 +161,11 @@ public class Game {
         //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
         // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
         if (bool == 1) {
-            rightAnswers = Tools.filterDifferentParamsList(figures, currSize, 8);
+//            rightAnswers = Tools.filterDifferentParamsList(figures, currSize, 8);
 
             threes = Tools.filterDifferentParamsList(figures, currSize, 3);
+
+            System.out.println("Diff size");
 
             firstRoundGameProcess(currSize, rightAnswers, wrongAnswers, threes, bool);
         } else {
@@ -201,12 +204,11 @@ public class Game {
         //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
         // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
         if (bool == 1) {
-            rightAnswers = Tools.filterDifferentParamsList(figures, currType, 8);
+//            rightAnswers = Tools.filterDifferentParamsList(figures, currType, 8);
 
             threes = Tools.filterDifferentParamsList(figures, currType, 3);
 
-            System.out.println("Size right: " + rightAnswers.size());
-            System.out.println("Size wrong: " + wrongAnswers.size());
+            System.out.println("Diff type");
 
             firstRoundGameProcess(currType, rightAnswers, wrongAnswers, threes, bool);
         } else {
@@ -228,15 +230,37 @@ public class Game {
         Random rand = new Random();
 
         if (bool == 1) {
+            Stream<Figure> wrongAnswers_stream;
+            Stream<Figure> rightAnswers_stream;
+
             if (currObj instanceof Color) {
                 if (threes.get(threes.size() - 1).getColor() == currObj) {
-                    Stream<Figure> wrongAnswers_stream = figures.stream().filter(figure -> figure.getColor() == currObj);
-                    Stream<Figure> rightAnswers_stream = figures.stream().filter(figure -> figure.getColor() != currObj);
-
-                    rightAnswers = rightAnswers_stream.collect(Collectors.toList());
-                    wrongAnswers = wrongAnswers_stream.collect(Collectors.toList());
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameColor);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffColor);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffColor);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameColor);
+                }
+            } else if (currObj instanceof Size) {
+                if (threes.get(threes.size() - 1).getSize() == currObj) {
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameSize);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffSize);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffSize);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameSize);
+                }
+            } else  {
+                if (threes.get(threes.size() - 1).getType() == currObj) {
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameType);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffType);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffType);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameType);
                 }
             }
+
+            rightAnswers = rightAnswers_stream.collect(Collectors.toList());
+            wrongAnswers = wrongAnswers_stream.collect(Collectors.toList());
         }
 
         int ran = rand.nextInt(rightAnswers.size()); //Рандомный индекс по "правильному" листу
@@ -256,6 +280,7 @@ public class Game {
         Random rand = new Random();
 
         //Пока есть попытки, можно играть
+        int rounds = 1;
         while (attempts > 0) {
             System.out.println("Текущая последовательность: " + threes);
             System.out.println("\n");
@@ -310,13 +335,19 @@ public class Game {
                 name_of_game = "Пойти фигурой иного типа.";
             }
 
-            if (condidiion == currObj) {
+            boolean cond_right_2 = condidiion != currObj && rounds % 2 == 0 && bool == 1;
+            boolean cond_right_1 = condidiion == currObj && rounds % 2 != 0 && bool == 1;
+            boolean cond_right_default = condidiion == currObj && bool == 0;
+
+//            if ( (condidiion == currObj && bool == 0) || (rounds % 2 == 0 && bool == 1) ) {
+            if (cond_right_default || cond_right_1 || cond_right_2) {
                 System.out.println("Правильно" + "\n");
                 points += 2;
+                rounds += 1;
                 threes.add(choices.get(ans - 1));
 
                 if (threes.size() == 8) {
-                    System.out.println("Поздравляем! Вы прошли первый раунд! Условием было: " + name_of_game);
+                    System.out.println("Поздравляем! Вы прошли первый тур! Условием было: " + name_of_game);
                     System.out.println("Набрано очков: " + points);
                     break;
                 }
@@ -325,9 +356,11 @@ public class Game {
                 attempts--;
                 System.out.println("Неправильно. У вас осталось " + attempts + " попыток" + "\n");
                 points -= 1;
+//                rounds += 1;
+
                 if (attempts == 0) {
                     System.out.println("Игра окончена. Вы дисквалифицированы.");
-                    System.out.println("Условием было:" + name_of_game);
+                    System.out.println("Условием было: " + name_of_game);
                     System.out.println("Набрано очков: " + points);
                     break;
                 }

@@ -13,28 +13,37 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Tools {
-    static Predicate<Figure> diffColor = figure -> figure.getColor() != Color.BLUE || figure.getColor() == Color.YELLOW;
-    static Predicate<Figure> sameColor = figure -> figure.getColor() == Color.BLUE || figure.getColor() != Color.YELLOW;
+//    static Predicate<Figure> diffColor = figure -> figure.getColor() != Color.BLUE || figure.getColor() == Color.YELLOW;
+//    static Predicate<Figure> sameColor = figure -> figure.getColor() == Color.BLUE || figure.getColor() != Color.YELLOW;
+//
+//    static Predicate<Figure> diffSize = figure -> figure.getSize() != Size.BIG || figure.getSize() == Size.SMALL;
+//    static Predicate<Figure> sameSize = figure -> figure.getSize() == Size.BIG || figure.getSize() != Size.SMALL;
+//
+//    static Predicate<Figure> diffType = figure -> figure.getType() != Type.CIRCLE || figure.getType() == Type.SQUARE;
+//    static Predicate<Figure> sameType = figure -> figure.getType() == Type.CIRCLE || figure.getType() != Type.SQUARE;
 
-    static Predicate<Figure> diffSize = figure -> figure.getSize() != Size.BIG || figure.getSize() == Size.SMALL;
-    static Predicate<Figure> sameSize = figure -> figure.getSize() == Size.BIG || figure.getSize() != Size.SMALL;
+    static Predicate<Figure> diffColor;
+    static Predicate<Figure> sameColor;
 
-    static Predicate<Figure> diffType = figure -> figure.getType() != Type.CIRCLE || figure.getType() == Type.SQUARE;
-    static Predicate<Figure> sameType = figure -> figure.getType() == Type.CIRCLE || figure.getType() != Type.SQUARE;
+    static Predicate<Figure> diffSize;
+    static Predicate<Figure> sameSize;
+
+    static Predicate<Figure> diffType;
+    static Predicate<Figure> sameType;
 
     public static List<Figure> filterDifferentParamsList(List<Figure> list, Object currObj, int neddedElems) {
         Random rand = new Random();
         List<Figure> copy_list = list;
         List<Figure> newList;
 
-//        Predicate<Figure> diffColor = figure -> figure.getColor() != currObj;
-//        Predicate<Figure> sameColor = figure -> figure.getColor() == currObj;
-//
-//        Predicate<Figure> diffSize = figure -> figure.getSize() != currObj;
-//        Predicate<Figure> sameSize = figure -> figure.getSize() == currObj;
-//
-//        Predicate<Figure> diffType = figure -> figure.getType() != currObj;
-//        Predicate<Figure> sameType = figure -> figure.getType() == currObj;
+        diffColor = figure -> figure.getColor() != currObj;
+        sameColor = figure -> figure.getColor() == currObj;
+
+        diffSize = figure -> figure.getSize() != currObj;
+        sameSize = figure -> figure.getSize() == currObj;
+
+        diffType = figure -> figure.getType() != currObj;
+        sameType = figure -> figure.getType() == currObj;
 
         if (currObj instanceof Color) {
             newList = filterListByPredicates(diffColor, sameColor, copy_list, neddedElems);
