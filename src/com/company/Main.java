@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.firstTour();
+        game.secondTour();
 
 //        List<Figure> baseList = List.of(
 //                new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
