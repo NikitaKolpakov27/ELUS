@@ -1,6 +1,8 @@
 package com.company.enums;
 
-public enum Size {
+import com.company.service.Param;
+
+public enum Size implements Param {
     SMALL,
     BIG
 }

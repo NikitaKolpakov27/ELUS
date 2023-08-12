@@ -14,9 +14,12 @@ public class GameProcess {
     private int points; // Очки игрока
 
     //Игровой процесс. Вынесен в отдельный метод для оптимизации
-    public void playRound(Object currObj, List<Figure> rightAnswers,
+    public void playRound(Param currObj, List<Figure> rightAnswers,
                                        List<Figure> wrongAnswers, List<Figure> threes, int bool) {
-        Random rand = new Random();
+
+        List<List<Figure>> answers = Tools.makeAnswers(threes, currObj);
+        List<Figure> rightAnswers = answers.get(0);
+        List<Figure> wrongAnswers = answers.get(1);
 
         //Пока есть попытки, можно играть
         int rounds = 1;

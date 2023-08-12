@@ -28,18 +28,13 @@ public class Game {
             new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
             new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
 
-    public FirstTour firstTour;
-    public SecondTour secondTour;
+    public Tour tour;
 
-    public Game(FirstTour firstTour) {
-        this.firstTour = firstTour;
+    public Game(Tour tour) {
+        this.tour = tour;
     }
 
-    public FirstTour getFirstTour() {
-        return firstTour;
-    }
-
-    public SecondTour getSecondTour() {
-        return secondTour;
+    public Tour getTour() {
+        return tour;
     }
 }

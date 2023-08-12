@@ -1,6 +1,8 @@
 package com.company.enums;
 
-public enum Color {
+import com.company.service.Param;
+
+public enum Color implements Param {
     YELLOW,
     BLUE
 }

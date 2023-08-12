@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 import static com.company.service.Game.figures;
 
-public class FirstTour {
+public class FirstTour implements Tour {
 
     public GameProcess gameProcess;
 
@@ -21,61 +21,6 @@ public class FirstTour {
         this.gameProcess = gameProcess;
     }
 
-    public void startFirstTour() {
-
-        //Рандомно получаем, как будем играть (по цвету, размеру или типу)
-        Object obj = null;
-        Random random = new Random();
-        int rand = random.nextInt(3);
-
-        if (rand == 0) {
-            obj = Color.BLUE;
-        } if (rand == 1) {
-            obj = Size.BIG;
-        } if (rand == 2) {
-            obj = Type.CIRCLE;
-        }
-
-        //Выбор правильного цвета для игры
-        if (obj instanceof Color) {
-            int ran = random.nextInt(2);
-            Color currColor;
-
-            if (ran == 0) {
-                currColor = Color.BLUE;
-                gameByColor(currColor);
-            } else {
-                currColor = Color.YELLOW;
-                gameByColor(currColor);
-            }
-
-            //Выбор правильного размера для игры
-        } else if (obj instanceof Size) {
-            int ran = random.nextInt(2);
-            Size currSize;
-
-            if (ran == 0) {
-                currSize = Size.BIG;
-                gameBySize(currSize);
-            } else {
-                currSize = Size.SMALL;
-                gameBySize(currSize);
-            }
-
-            //Выбор правильного типа для игры
-        } else {
-            int ran = random.nextInt(2);
-            Type currType;
-
-            if (ran == 0) {
-                currType = Type.CIRCLE;
-                gameByType(currType);
-            } else {
-                currType = Type.SQUARE;
-                gameByType(currType);
-            }
-        }
-    }
 
     private void gameByColor(Color currColor) {
         Random rand = new Random();
@@ -204,6 +149,62 @@ public class FirstTour {
             threes = Tools.exceptRepeatInList(rightAnswers_copy, 3);
 
             this.gameProcess.playRound(currType, rightAnswers, wrongAnswers, threes, bool);
+        }
+    }
+
+    @Override
+    public void startTour() {
+        //Рандомно получаем, как будем играть (по цвету, размеру или типу)
+        Object obj = null;
+        Random random = new Random();
+        int rand = random.nextInt(3);
+
+        if (rand == 0) {
+            obj = Color.BLUE;
+        } if (rand == 1) {
+            obj = Size.BIG;
+        } if (rand == 2) {
+            obj = Type.CIRCLE;
+        }
+
+        //Выбор правильного цвета для игры
+        if (obj instanceof Color) {
+            int ran = random.nextInt(2);
+            Color currColor;
+
+            if (ran == 0) {
+                currColor = Color.BLUE;
+                gameByColor(currColor);
+            } else {
+                currColor = Color.YELLOW;
+                gameByColor(currColor);
+            }
+
+            //Выбор правильного размера для игры
+        } else if (obj instanceof Size) {
+            int ran = random.nextInt(2);
+            Size currSize;
+
+            if (ran == 0) {
+                currSize = Size.BIG;
+                gameBySize(currSize);
+            } else {
+                currSize = Size.SMALL;
+                gameBySize(currSize);
+            }
+
+            //Выбор правильного типа для игры
+        } else {
+            int ran = random.nextInt(2);
+            Type currType;
+
+            if (ran == 0) {
+                currType = Type.CIRCLE;
+                gameByType(currType);
+            } else {
+                currType = Type.SQUARE;
+                gameByType(currType);
+            }
         }
     }
 }

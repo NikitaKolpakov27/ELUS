@@ -138,15 +138,17 @@ public class Tools {
     public static List<Figure> makeThrees() {
         Random rand = new Random();
         Figure firstFigure = figures.get(rand.nextInt(0, figures.size()));
-        Figure secondFigure = null;
-        Figure thirdFigure = null;
+        Figure secondFigure;
+        Figure thirdFigure;
 
+        // Проверяем первую фигуру и на ее основе формируем вторую
         if (firstFigure.getSize() == Size.BIG) {
             secondFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
         } else {
             secondFigure = Game.figures_only_yellow.get(rand.nextInt(0, Game.figures_only_yellow.size()));
         }
 
+        // По аналогии формируем третью фигуру
         if (secondFigure.getSize() == Size.BIG) {
             thirdFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
         } else {
@@ -161,7 +163,17 @@ public class Tools {
         return threes;
     }
 
-    //Метод для выбора правильного и неправильных ответов
+    /*
+    * Метод для выбора правильного и неправильных ответов
+    *
+    * @rightAnswers - правильные ответы (правильные фигуры)
+    * @wrongAnswers - неправильные ответы (неправильные фигуры)
+    * @threes - массив, состоящий из 3-х фигур, предложенных для выбора игроку (2 неправильных и 1 правильный)
+    * @bool - условие, что игра идет последовательно (0 - идти тем же цветом/типом/размером; 1 - наоборот)
+    * @currObj - объект, показывающий, относительно чего будет вестись проверка (цвет, размер, тип)
+    *
+    *
+    * */
     public static List<Figure> getChoices(List<Figure> rightAnswers, List<Figure> wrongAnswers,
                                     List<Figure> threes, int bool, Object currObj) {
         Random rand = new Random();
