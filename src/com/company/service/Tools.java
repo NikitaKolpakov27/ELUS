@@ -33,7 +33,6 @@ public class Tools {
     static Predicate<Figure> sameType;
 
     public static List<Figure> filterDifferentParamsList(List<Figure> list, Object currObj, int neddedElems) {
-        Random rand = new Random();
         List<Figure> copy_list = list;
         List<Figure> newList;
 
@@ -57,6 +56,11 @@ public class Tools {
         return newList;
     }
 
+
+    /*
+    *
+    *
+    * */
     private static List<Figure> filterListByPredicates(Predicate<Figure> predicate_even,
                                 Predicate<Figure> predicate_odd, List<Figure> copy_list, int neddedElems) {
         Random rand = new Random();
@@ -115,7 +119,10 @@ public class Tools {
     /*
     * Возвращает список из двух списков: 1 = правильные ответы, 2 = неправильные
     *
+    * @threes - список из 3-х фигур, предложенных для выбора пользователю (1 прав., 2 неправ.)
+    * @rightParam - параметр, относительно которого идет составление правильных и неправильных ответов
     *
+    * @return - возвращает два списка, правильные и неправильные ответы
     *
     * */
     public static List<List<Figure>> makeAnswers(List<Figure> threes, Param rightParam) {

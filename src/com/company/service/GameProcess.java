@@ -17,13 +17,13 @@ public class GameProcess {
     public void playRound(Param currObj, List<Figure> rightAnswers,
                                        List<Figure> wrongAnswers, List<Figure> threes, int bool) {
 
-        List<List<Figure>> answers = Tools.makeAnswers(threes, currObj);
-        rightAnswers = answers.get(0);
-        wrongAnswers = answers.get(1);
-
         //Пока есть попытки, можно играть
         int rounds = 1;
         while (attempts > 0) {
+            List<List<Figure>> answers = Tools.makeAnswers(threes, currObj);
+            rightAnswers = answers.get(0);
+            wrongAnswers = answers.get(1);
+
             System.out.println("Текущая последовательность: " + threes);
             System.out.println("\n");
 

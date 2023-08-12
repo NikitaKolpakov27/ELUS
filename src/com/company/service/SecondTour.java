@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.company.service.Game.ID_BIG_BLUE;
 import static com.company.service.Game.figures;
 
 public class SecondTour implements Tour {
@@ -27,7 +28,7 @@ public class SecondTour implements Tour {
         List<Figure> rightAnswers = answers.get(0);
         List<Figure> wrongAnswers = answers.get(1);
 
-        this.gameProcess.playRound(currSize, rightAnswers, wrongAnswers, threes, 0);
+        this.gameProcess.playRound(Color.BLUE, rightAnswers, wrongAnswers, threes, 0, ID_BIG_BLUE);
     }
 
     @Override
