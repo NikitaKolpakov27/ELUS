@@ -14,14 +14,6 @@ import java.util.stream.Stream;
 import static com.company.service.Game.figures;
 
 public class Tools {
-//    static Predicate<Figure> diffColor = figure -> figure.getColor() != Color.BLUE || figure.getColor() == Color.YELLOW;
-//    static Predicate<Figure> sameColor = figure -> figure.getColor() == Color.BLUE || figure.getColor() != Color.YELLOW;
-//
-//    static Predicate<Figure> diffSize = figure -> figure.getSize() != Size.BIG || figure.getSize() == Size.SMALL;
-//    static Predicate<Figure> sameSize = figure -> figure.getSize() == Size.BIG || figure.getSize() != Size.SMALL;
-//
-//    static Predicate<Figure> diffType = figure -> figure.getType() != Type.CIRCLE || figure.getType() == Type.SQUARE;
-//    static Predicate<Figure> sameType = figure -> figure.getType() == Type.CIRCLE || figure.getType() != Type.SQUARE;
 
     static Predicate<Figure> diffColor;
     static Predicate<Figure> sameColor;
@@ -208,16 +200,16 @@ public class Tools {
     * @rightAnswers - правильные ответы (правильные фигуры)
     * @wrongAnswers - неправильные ответы (неправильные фигуры)
     * @threes - массив, состоящий из 3-х фигур, предложенных для выбора игроку (2 неправильных и 1 правильный)
-    * @bool - условие, что игра идет последовательно (0 - идти тем же цветом/типом/размером; 1 - наоборот)
+    * @id идентификатор игры (111, 110 и 112 - игры, где надо пойти другим цветом, размером или типом)
     * @currObj - объект, показывающий, относительно чего будет вестись проверка (цвет, размер, тип)
     *
     *
     * */
     public static List<Figure> getChoices(List<Figure> rightAnswers, List<Figure> wrongAnswers,
-                                    List<Figure> threes, int bool, Object currObj) {
+                                    List<Figure> threes, int id, Object currObj) {
         Random rand = new Random();
 
-        if (bool == 1) {
+        if (id == 111 || id == 110 || id == 112) {
             Stream<Figure> wrongAnswers_stream;
             Stream<Figure> rightAnswers_stream;
 

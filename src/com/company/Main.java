@@ -9,11 +9,10 @@ public class Main {
 
     public static void main(String[] args) {
         GameProcess gameProcess = new GameProcess();
-//        FirstTour firstTour = new FirstTour(gameProcess);
+        FirstTour firstTour = new FirstTour(gameProcess);
 //        SecondTour secondTour = new SecondTour(gameProcess);
-//        Game game = new Game(secondTour);
-//        game.getTour().startTour();
-        System.out.println(1_1);
+        Game game = new Game(firstTour);
+        game.getTour().startTour();
 
     }
 }

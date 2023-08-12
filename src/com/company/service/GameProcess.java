@@ -15,7 +15,7 @@ public class GameProcess {
 
     //Игровой процесс. Вынесен в отдельный метод для оптимизации
     public void playRound(Param currObj, List<Figure> rightAnswers,
-                                       List<Figure> wrongAnswers, List<Figure> threes, int bool) {
+                                       List<Figure> wrongAnswers, List<Figure> threes, int id) {
 
         //Пока есть попытки, можно играть
         int rounds = 1;
@@ -27,7 +27,7 @@ public class GameProcess {
             System.out.println("Текущая последовательность: " + threes);
             System.out.println("\n");
 
-            List<Figure> choices = Tools.getChoices(rightAnswers, wrongAnswers, threes, bool, currObj);
+            List<Figure> choices = Tools.getChoices(rightAnswers, wrongAnswers, threes, id, currObj);
 
             // Получение списка ответов для выбора (в рандомном порядке)
             choices = Tools.makeRandomOrderList(choices);
@@ -40,40 +40,66 @@ public class GameProcess {
 
             //Процесс выбора
             //В зависимости от переданного объекта, выбирается, какой метод будет вызываться
-            Object condidiion = null;
+            Object condition = null;
             String name_of_game = "";
 
-            if (currObj instanceof Color && bool == 0) {
-                condidiion = choices.get(ans - 1).getColor();
-                name_of_game = "Пойти фигурой того же цвета.";
+            switch (id) {
 
-            } else if (currObj instanceof Color && bool == 1) {
-                condidiion = choices.get(ans - 1).getColor();
-                name_of_game = "Пойти фигурой иного цвета.";
+                case Game.ID_SAME_COLOR -> {
+                    condition = choices.get(ans - 1).getColor();
+                    name_of_game = "Пойти фигурой того же цвета.";
+                }
+
+                case Game.ID_SAME_SIZE -> {
+                    condition = choices.get(ans - 1).getSize();
+                    name_of_game = "Пойти фигурой того же размера.";
+                }
+
+                case Game.ID_SAME_TYPE -> {
+                    condition = choices.get(ans - 1).getType();
+                    name_of_game = "Пойти фигурой того же типа.";
+                }
+
+                case Game.ID_DIFF_COLOR -> {
+                    condition = choices.get(ans - 1).getColor();
+                    name_of_game = "Пойти фигурой иного цвета.";
+                }
+
+                case Game.ID_DIFF_SIZE -> {
+                    condition = choices.get(ans - 1).getSize();
+                    name_of_game = "Пойти фигурой иного размера.";
+                }
+
+                case Game.ID_DIFF_TYPE -> {
+                    condition = choices.get(ans - 1).getType();
+                    name_of_game = "Пойти фигурой иного типа.";
+                }
+
+                // 2-й тур
+                case Game.ID_BIG_BLUE -> {
+                    condition = choices.get(ans - 1).getColor();
+                    name_of_game = "Если последняя фигура BIG, пойти синим, иначе желтым";
+                }
+
             }
 
-            if (currObj instanceof Size && bool == 0) {
-                condidiion = choices.get(ans - 1).getSize();
-                name_of_game = "Пойти фигурой того же размера.";
-            } else if (currObj instanceof Size && bool == 1) {
-                condidiion = choices.get(ans - 1).getSize();
-                name_of_game = "Пойти фигурой иного размера.";
-            }
+            // 1-Й ТУР //
+            // Условие, что правильно выбрали в первых 3-х геймах
+            boolean conditionFirstRoundNormal = condition == currObj &&
+                    id == Game.ID_SAME_SIZE || id == Game.ID_SAME_COLOR || id == Game.ID_SAME_TYPE;
 
-            if (currObj instanceof Type && bool == 0) {
-                condidiion = choices.get(ans - 1).getType();
-                name_of_game = "Пойти фигурой того же типа.";
-            } else if (currObj instanceof Type && bool == 1) {
-                condidiion = choices.get(ans - 1).getType();
-                name_of_game = "Пойти фигурой иного типа.";
-            }
+            // Условие, что правильно выбрали в последних 3-х геймах
+            boolean conditionFirstRoundSpecial = condition != currObj &&
+                    id == Game.ID_DIFF_SIZE || id == Game.ID_DIFF_COLOR || id == Game.ID_DIFF_TYPE;
 
-            boolean cond_right_2 = condidiion != currObj && rounds % 2 == 0 && bool == 1;
-            boolean cond_right_1 = condidiion == currObj && rounds % 2 != 0 && bool == 1;
-            boolean cond_right_default = condidiion == currObj && bool == 0;
+            // 2-Й ТУР //
+            // Условие, что правильно выбрали, когда Биг = Блу
+            boolean conditionSecondRound_BigBlue = condition == Color.BLUE &&
+                    threes.get(threes.size() - 1).getSize() == currObj ||
+                    condition == Color.YELLOW && threes.get(threes.size() - 1).getSize() != currObj;
 
 
-            if (cond_right_default || cond_right_1 || cond_right_2) {
+            if (conditionFirstRoundNormal | conditionFirstRoundSpecial | conditionSecondRound_BigBlue) {
                 System.out.println("Правильно" + "\n");
                 points += 2;
                 rounds += 1;

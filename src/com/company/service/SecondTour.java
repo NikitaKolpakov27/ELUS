@@ -28,7 +28,7 @@ public class SecondTour implements Tour {
         List<Figure> rightAnswers = answers.get(0);
         List<Figure> wrongAnswers = answers.get(1);
 
-        this.gameProcess.playRound(Color.BLUE, rightAnswers, wrongAnswers, threes, 0, ID_BIG_BLUE);
+        this.gameProcess.playRound(currSize, rightAnswers, wrongAnswers, threes, ID_BIG_BLUE);
     }
 
     @Override
