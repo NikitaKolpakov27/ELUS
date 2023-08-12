@@ -61,20 +61,21 @@ public class Tools {
                                 Predicate<Figure> predicate_odd, List<Figure> copy_list, int neddedElems) {
         Random rand = new Random();
         List<Figure> newList = new ArrayList<>();
+        Stream<Figure> tempStream;
+
         for (int count = 0; count < neddedElems; count++) {
+
             if (count % 2 == 0) {
-                Stream<Figure> tempStream = copy_list.stream().filter(predicate_even);
-                List<Figure> tempList = tempStream.collect(Collectors.toList());
-                int randomIndex = rand.nextInt(tempList.size());
-                Figure neddedFig = tempList.get(randomIndex);
-                newList.add(neddedFig);
+                tempStream = copy_list.stream().filter(predicate_even);
             } else {
-                Stream<Figure> tempStream = copy_list.stream().filter(predicate_odd);
-                List<Figure> tempList = tempStream.collect(Collectors.toList());
-                int randomIndex = rand.nextInt(tempList.size());
-                Figure neddedFig = tempList.get(randomIndex);
-                newList.add(neddedFig);
+                tempStream = copy_list.stream().filter(predicate_odd);
             }
+
+            List<Figure> tempList = tempStream.toList();
+            int randomIndex = rand.nextInt(tempList.size());
+            Figure neddedFig = tempList.get(randomIndex);
+            newList.add(neddedFig);
+
         }
         return newList;
     }
@@ -111,20 +112,51 @@ public class Tools {
         return tempList;
     }
 
-    /* Возвращает список из двух списков: 1 = правильные ответы, 2 = неправильные
+    /*
+    * Возвращает список из двух списков: 1 = правильные ответы, 2 = неправильные
+    *
+    *
+    *
     * */
-    public static List<List<Figure>> makeAnswers(List<Figure> threes, Size rightSize) {
+    public static List<List<Figure>> makeAnswers(List<Figure> threes, Param rightParam) {
         Figure lastFigure = threes.get(threes.size() - 1);
         List<Figure> rightAnswers;
         List<Figure> wrongAnswers;
 
+        // Проверка rightParam на параметр - ЦВЕТ, ТИП или РАЗМЕР
+
         // Например: если размер BIG -> цвет = BLUE
-        if (lastFigure.getSize() == rightSize) {
-            rightAnswers = Game.figures_only_blue;
-            wrongAnswers = Game.figures_only_yellow;
+        if (rightParam instanceof Size) {
+
+            if (lastFigure.getSize() == rightParam) {
+                rightAnswers = Game.figures_only_blue;
+                wrongAnswers = Game.figures_only_yellow;
+            } else {
+                rightAnswers = Game.figures_only_yellow;
+                wrongAnswers = Game.figures_only_blue;
+            }
+
+        // Например: если цвет BLUE -> тип = CIRCLE
+        } else if (rightParam instanceof Color) {
+
+            if (lastFigure.getColor() == rightParam) {
+                rightAnswers = Game.figures_only_circles;
+                wrongAnswers = Game.figures_only_squares;
+            } else {
+                rightAnswers = Game.figures_only_squares;
+                wrongAnswers = Game.figures_only_circles;
+            }
+
+        // Например: если тип SQUARE -> размер = BIG
         } else {
-            rightAnswers = Game.figures_only_yellow;
-            wrongAnswers = Game.figures_only_blue;
+
+            if (lastFigure.getType() == rightParam) {
+                rightAnswers = Game.figures_only_big;
+                wrongAnswers = Game.figures_only_small;
+            } else {
+                rightAnswers = Game.figures_only_small;
+                wrongAnswers = Game.figures_only_big;
+            }
         }
 
         List<List<Figure>> answers = new ArrayList<>();

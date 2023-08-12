@@ -12,7 +12,7 @@ public class Game {
             new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
             new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
 
-    public final List<Figure> figures_only_big = List.of(
+    public static final List<Figure> figures_only_big = List.of(
             new Figure(Color.BLUE, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.SQUARE),
             new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE));
 
@@ -27,6 +27,14 @@ public class Game {
     public static final List<Figure> figures_only_yellow = List.of(
             new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
             new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
+
+    public static final List<Figure> figures_only_circles = List.of(
+            new Figure(Color.YELLOW, Size.BIG, Type.CIRCLE), new Figure(Color.BLUE, Size.BIG, Type.CIRCLE),
+            new Figure(Color.YELLOW, Size.SMALL, Type.CIRCLE), new Figure(Color.BLUE, Size.SMALL, Type.CIRCLE));
+
+    public static final List<Figure> figures_only_squares = List.of(
+            new Figure(Color.BLUE, Size.SMALL, Type.SQUARE), new Figure(Color.YELLOW, Size.BIG, Type.SQUARE),
+            new Figure(Color.BLUE, Size.BIG, Type.SQUARE), new Figure(Color.YELLOW, Size.SMALL, Type.SQUARE));
 
     public Tour tour;
 

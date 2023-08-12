@@ -21,7 +21,7 @@ public class SecondTour implements Tour {
     }
 
     // 2-й раунд. Игра по размеру (если BIG => BLUE, SMALL => YELLOW)
-    private void gameBySize_sec(Size currSize) {
+    private void gameBySize(Size currSize) {
         List<Figure> threes = Tools.makeThrees();
         List<List<Figure>> answers = Tools.makeAnswers(threes, currSize);
         List<Figure> rightAnswers = answers.get(0);
@@ -47,10 +47,10 @@ public class SecondTour implements Tour {
         //на данный момент добавлено только условие "если БИГ ->  СИНИЙ, иначе -> ЖЁЛТЫЙ"
         if (ran == 0) {
             currSize = Size.BIG;
-            gameBySize_sec(currSize);
+            gameBySize(currSize);
         } else {
             currSize = Size.SMALL;
-            gameBySize_sec(currSize);
+            gameBySize(currSize);
         }
     }
 }

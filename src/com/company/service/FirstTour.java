@@ -49,18 +49,12 @@ public class FirstTour implements Tour {
         //Режим с иным типом\цветом\размером специфичен и весьма заметно отличается от режима с одинаковым параметром.
         // Так что для создания "правильных" и "неправильных" массивов вызывается дополнительная функция
         if (bool == 1) {
-            //rightAnswers = Tools.filterDifferentParamsList(figures, currColor, 8);
-
             threes = Tools.filterDifferentParamsList(figures, currColor, 3);
-
             System.out.println("Diff color");
-
             this.gameProcess.playRound(currColor, rightAnswers, wrongAnswers, threes, bool);
         } else {
             List<Figure> rightAnswers_copy = new ArrayList<>(rightAnswers.subList(0, rightAnswers.size()));
-
             threes = Tools.exceptRepeatInList(rightAnswers_copy, 3);
-
             this.gameProcess.playRound(currColor, rightAnswers, wrongAnswers, threes, bool);
         }
     }

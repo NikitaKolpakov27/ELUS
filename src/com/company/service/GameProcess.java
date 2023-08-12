@@ -18,8 +18,8 @@ public class GameProcess {
                                        List<Figure> wrongAnswers, List<Figure> threes, int bool) {
 
         List<List<Figure>> answers = Tools.makeAnswers(threes, currObj);
-        List<Figure> rightAnswers = answers.get(0);
-        List<Figure> wrongAnswers = answers.get(1);
+        rightAnswers = answers.get(0);
+        wrongAnswers = answers.get(1);
 
         //Пока есть попытки, можно играть
         int rounds = 1;
