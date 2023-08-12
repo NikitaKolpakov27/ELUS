@@ -2,7 +2,6 @@ package com.company.service;
 
 import com.company.enums.Color;
 import com.company.enums.Size;
-import com.company.enums.Type;
 import com.company.model.Figure;
 
 import java.util.ArrayList;
@@ -11,6 +10,8 @@ import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.company.service.Game.figures;
 
 public class Tools {
 //    static Predicate<Figure> diffColor = figure -> figure.getColor() != Color.BLUE || figure.getColor() == Color.YELLOW;
@@ -90,5 +91,123 @@ public class Tools {
             copy_list.remove(randomIndex);
         }
         return newList;
+    }
+
+    public static List<Figure> makeRandomOrderList(List<Figure> list) {
+        Random rand = new Random();
+
+        List<Figure> choices_copy = new ArrayList<>(list.subList(0, list.size()));
+        List<Figure> tempList = new ArrayList<>();
+
+        //Создание рандомного порядка возможных ответов
+        int numberOfElements = 3;
+        for (int i = 0; i < numberOfElements; i++) {
+            int randomIndex = rand.nextInt(choices_copy.size());
+            Figure randomElement = choices_copy.get(randomIndex);
+            tempList.add(randomElement);
+            choices_copy.remove(randomIndex);
+        }
+
+        return tempList;
+    }
+
+    /* Возвращает список из двух списков: 1 = правильные ответы, 2 = неправильные
+    * */
+    public static List<List<Figure>> makeAnswers(List<Figure> threes, Size rightSize) {
+        Figure lastFigure = threes.get(threes.size() - 1);
+        List<Figure> rightAnswers;
+        List<Figure> wrongAnswers;
+
+        // Например: если размер BIG -> цвет = BLUE
+        if (lastFigure.getSize() == rightSize) {
+            rightAnswers = Game.figures_only_blue;
+            wrongAnswers = Game.figures_only_yellow;
+        } else {
+            rightAnswers = Game.figures_only_yellow;
+            wrongAnswers = Game.figures_only_blue;
+        }
+
+        List<List<Figure>> answers = new ArrayList<>();
+        answers.add(rightAnswers);
+        answers.add(wrongAnswers);
+
+        return answers;
+    }
+
+    // 2nd Tour
+    public static List<Figure> makeThrees() {
+        Random rand = new Random();
+        Figure firstFigure = figures.get(rand.nextInt(0, figures.size()));
+        Figure secondFigure = null;
+        Figure thirdFigure = null;
+
+        if (firstFigure.getSize() == Size.BIG) {
+            secondFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
+        } else {
+            secondFigure = Game.figures_only_yellow.get(rand.nextInt(0, Game.figures_only_yellow.size()));
+        }
+
+        if (secondFigure.getSize() == Size.BIG) {
+            thirdFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
+        } else {
+            thirdFigure = Game.figures_only_yellow.get(rand.nextInt(0, Game.figures_only_yellow.size()));
+        }
+
+        List<Figure> threes = new ArrayList<>();
+        threes.add(firstFigure);
+        threes.add(secondFigure);
+        threes.add(thirdFigure);
+
+        return threes;
+    }
+
+    //Метод для выбора правильного и неправильных ответов
+    public static List<Figure> getChoices(List<Figure> rightAnswers, List<Figure> wrongAnswers,
+                                    List<Figure> threes, int bool, Object currObj) {
+        Random rand = new Random();
+
+        if (bool == 1) {
+            Stream<Figure> wrongAnswers_stream;
+            Stream<Figure> rightAnswers_stream;
+
+            if (currObj instanceof Color) {
+                if (threes.get(threes.size() - 1).getColor() == currObj) {
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameColor);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffColor);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffColor);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameColor);
+                }
+            } else if (currObj instanceof Size) {
+                if (threes.get(threes.size() - 1).getSize() == currObj) {
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameSize);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffSize);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffSize);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameSize);
+                }
+            } else  {
+                if (threes.get(threes.size() - 1).getType() == currObj) {
+                    wrongAnswers_stream = figures.stream().filter(Tools.sameType);
+                    rightAnswers_stream = figures.stream().filter(Tools.diffType);
+                } else {
+                    wrongAnswers_stream = figures.stream().filter(Tools.diffType);
+                    rightAnswers_stream = figures.stream().filter(Tools.sameType);
+                }
+            }
+
+            rightAnswers = rightAnswers_stream.collect(Collectors.toList());
+            wrongAnswers = wrongAnswers_stream.collect(Collectors.toList());
+        }
+
+        int ran = rand.nextInt(rightAnswers.size()); //Рандомный индекс по "правильному" листу
+
+        int ran_wr_1 = rand.nextInt(wrongAnswers.size()); //Рандомный индекс_1 по "неправильному" листу
+        int ran_wr_2 = rand.nextInt(wrongAnswers.size()); //Рандомный индекс_2 по "неправильному" листу
+
+        //Создание выбора (состоит из 1 правильного и 2-х неправильных вариантов)
+        return List.of(rightAnswers.get(ran), wrongAnswers.get(ran_wr_1), wrongAnswers.get(ran_wr_2));
+
+
     }
 }
