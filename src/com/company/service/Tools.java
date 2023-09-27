@@ -124,7 +124,7 @@ public class Tools {
 
         // Проверка rightParam на параметр - ЦВЕТ, ТИП или РАЗМЕР
 
-        // Например: если размер BIG -> цвет = BLUE
+        // Например: если размер BIG(или SMALL) -> цвет = BLUE
         if (rightParam instanceof Size) {
 
             if (lastFigure.getSize() == rightParam) {
@@ -166,21 +166,21 @@ public class Tools {
     }
 
     // 2nd Tour
-    public static List<Figure> makeThrees() {
+    public static List<Figure> makeThrees(Param param) {
         Random rand = new Random();
         Figure firstFigure = figures.get(rand.nextInt(0, figures.size()));
         Figure secondFigure;
         Figure thirdFigure;
 
         // Проверяем первую фигуру и на ее основе формируем вторую
-        if (firstFigure.getSize() == Size.BIG) {
+        if (firstFigure.getSize() == param) {
             secondFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
         } else {
             secondFigure = Game.figures_only_yellow.get(rand.nextInt(0, Game.figures_only_yellow.size()));
         }
 
         // По аналогии формируем третью фигуру
-        if (secondFigure.getSize() == Size.BIG) {
+        if (secondFigure.getSize() == param) {
             thirdFigure = Game.figures_only_blue.get(rand.nextInt(0, Game.figures_only_blue.size()));
         } else {
             thirdFigure = Game.figures_only_yellow.get(rand.nextInt(0, Game.figures_only_yellow.size()));

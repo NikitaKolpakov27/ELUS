@@ -1,34 +1,28 @@
 package com.company.service;
 
-import com.company.enums.Color;
 import com.company.enums.Size;
 import com.company.model.Figure;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.company.service.Game.ID_BIG_BLUE;
-import static com.company.service.Game.figures;
+import static com.company.service.Game.ID_SMALL_BLUE;
 
 public class SecondTour implements Tour {
 
     public GameProcess gameProcess;
-
     public SecondTour(GameProcess gameProcess) {
         this.gameProcess = gameProcess;
     }
 
     // 2-й раунд. Игра по размеру (если BIG => BLUE, SMALL => YELLOW)
-    private void gameBySize(Size currSize) {
-        List<Figure> threes = Tools.makeThrees();
+    private void gameBySize(Size currSize, int id) {
+        List<Figure> threes = Tools.makeThrees(currSize);
         List<List<Figure>> answers = Tools.makeAnswers(threes, currSize);
         List<Figure> rightAnswers = answers.get(0);
         List<Figure> wrongAnswers = answers.get(1);
 
-        this.gameProcess.playRound(currSize, rightAnswers, wrongAnswers, threes, ID_BIG_BLUE);
+        this.gameProcess.playRound(currSize, rightAnswers, wrongAnswers, threes, id);
     }
 
     @Override
@@ -43,15 +37,15 @@ public class SecondTour implements Tour {
         Size currSize;
         Object choosableObj;
 
-        ran = 0; // специально делаем пока что ток одно условие
+        ran = 1; // специально делаем пока что ток одно условие
 
         //на данный момент добавлено только условие "если БИГ ->  СИНИЙ, иначе -> ЖЁЛТЫЙ"
         if (ran == 0) {
             currSize = Size.BIG;
-            gameBySize(currSize);
-        } else {
+            gameBySize(currSize, ID_BIG_BLUE);
+        } else { // условие "если SMALL ->  СИНИЙ, иначе -> ЖЁЛТЫЙ"
             currSize = Size.SMALL;
-            gameBySize(currSize);
+            gameBySize(currSize, ID_SMALL_BLUE);
         }
     }
 }

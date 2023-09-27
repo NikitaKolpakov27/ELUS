@@ -81,6 +81,11 @@ public class GameProcess {
                     name_of_game = "Если последняя фигура BIG, пойти синим, иначе желтым";
                 }
 
+                case Game.ID_SMALL_BLUE -> {
+                    condition = choices.get(ans - 1).getColor();
+                    name_of_game = "Если последняя фигура SMALL, пойти синим, иначе желтым";
+                }
+
             }
 
             // 1-Й ТУР //
@@ -93,10 +98,13 @@ public class GameProcess {
                     id == Game.ID_DIFF_SIZE || id == Game.ID_DIFF_COLOR || id == Game.ID_DIFF_TYPE;
 
             // 2-Й ТУР //
-            // Условие, что правильно выбрали, когда Биг = Блу
-            boolean conditionSecondRound_BigBlue = condition == Color.BLUE &&
-                    threes.get(threes.size() - 1).getSize() == currObj ||
+            // Условие, что правильно выбрали, когда Биг = Блу или SMALL = BLUE
+            boolean conditionSecondRound_BigBlue =
+                    condition == Color.BLUE && threes.get(threes.size() - 1).getSize() == currObj
+                            // Проверяем, что выбрали BLUE, если последний элемент в списке - BIG
+                            || // или
                     condition == Color.YELLOW && threes.get(threes.size() - 1).getSize() != currObj;
+                            // Выбираем YELLOW, если последний элемент в списке - SMALL (то бишь, != currObj)
 
 
             if (conditionFirstRoundNormal | conditionFirstRoundSpecial | conditionSecondRound_BigBlue) {
@@ -119,7 +127,7 @@ public class GameProcess {
                 if (attempts == 0) {
                     System.out.println("Игра окончена. Вы дисквалифицированы.");
                     System.out.println("Условием было: " + name_of_game);
-                    System.out.println("Набрано очков: " + points);
+                    System.out.println("Набрано очков: " + Math.round(points));
                     break;
                 }
             }
